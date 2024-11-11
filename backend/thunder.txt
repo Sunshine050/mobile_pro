@@ -1,0 +1,55 @@
+[post] http://localhost:3000/login
+{
+    "username" : "user",
+    "password" : "1111"
+}
+
+[post] http://localhost:3000/register
+{ 
+ "fullname" : "Nareerak2",
+ "username": "user2",
+ "confirmPassword": "4321",
+ "password": "4321"
+}  
+[get] http://localhost:3000/home
+[get] http://localhost:3000/assets
+[get] http://localhost:3000/borrow
+[post] http://localhost:3000/:borrowerId/:movieId/borrow
+{
+  "date_end": "2024-12-04"
+}
+[get] http://localhost:3000/user/:userId/history
+[post] http://localhost:3000/add
+{
+  "movie_name": "####",
+  "description": "####",
+  "categorie": 5,
+  "pic": "####"
+}
+[post] http://localhost:3000/admin/assets/:movieId/edit
+{
+    "movie_name": "The Dark Knight 3",
+    "description": "When the menace known as the Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham.",
+    "categorie": 8, 
+    "status_movie": 1, 
+    "pic": "Assets/image/dark_knight3.jpg"
+}
+[get]  http://localhost:3000/admin/history
+[get]  http://localhost:3000/admin/dashboard
+[get]  http://localhost:3000/admin/return
+[post] http://localhost:3000/admin/return/:borrowId
+{
+  "borrowId": 13,
+  "adminId": 2
+}
+[get]  http://localhost:3000/approver/confirm
+[post] http://localhost:3000/approver/confirm/13
+{
+    "approverId": "3"
+}
+[post] http://localhost:3000/approver/reject/13
+{
+    "approverId": "3"
+}
+[get]  http://localhost:3000/approver/dashboard
+[get]  http://localhost:3000/approver/:approverId/history
