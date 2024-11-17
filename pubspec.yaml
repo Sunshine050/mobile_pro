@@ -1,37 +1,31 @@
 name: project
-description: "A new Flutter project."
+description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.5.3 <4.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  file_picker: ^5.2.6
-  intl: ^0.17.0
+  file_picker: ^8.1.4
+  http: ^1.2.2
+  intl: ^0.19.0
   provider: ^6.0.0
   cupertino_icons: ^1.0.8
   carousel_slider: ^5.0.0
-  http: ^0.13.5
-  shared_preferences: ^2.1.1
-  jsonwebtoken: ^4.0.0
+  shared_preferences: ^2.0.15
+  dart_jsonwebtoken: ^2.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^2.0.0
 
 flutter:
-  fonts:
-    - family: PlayfairDisplay
-      fonts:
-        - asset: fonts/PlayfairDisplay-ExtraBold.ttf
-    - family: PTSerif-Regular
-      fonts:
-        - asset: fonts/PTSerif-Regular.ttf
+  uses-material-design: true
 
   assets:
     - Assets/image/Recommend_2.jpg
@@ -50,7 +44,7 @@ flutter:
     - Assets/image/knowledge.png
     - Assets/image/video-player.png
     - Assets/image/asset.png
-    - Assets/image/history_1.png # เปลี่ยนชื่อไฟล์ให้เหมาะสม
+    - Assets/image/history (1).png
     - Assets/image/home.png
     - Assets/image/logout.png
     - Assets/image/status.png
@@ -63,13 +57,13 @@ flutter:
     - Assets/image/crime.png
     - Assets/image/return.png
     - Assets/image/deadpool1.jpg
+    - Assets/image/H0007.jpg
     - Assets/image/M0001.jpg
     - Assets/image/M0002.jpg
     - Assets/image/T0001.jpg
     - Assets/image/T0002.jpg
     - Assets/image/T0003.jpg
     - Assets/image/T0004.jpg
-    - Assets/image/H0004.jpg
     - Assets/image/A0001.jpg
     - Assets/image/A0002.jpg
     - Assets/image/A0007.jpg
@@ -83,13 +77,33 @@ flutter:
     - Assets/image/D0001.jpg
     - Assets/image/D0002.jpg
     - Assets/image/D0003.jpg
-    - Assets/image/C00001.jpg
+    - Assets/image/C0001.jpg
     - Assets/image/C00002.jpg
     - Assets/image/C00003.jpg
     - Assets/image/H0004.jpg
     - Assets/image/H0003.jpg
     - Assets/image/H0002.jpg
-    - Assets/image/H00001.jpg
     - Assets/image/Y0001.jpg
+    - Assets/image/F0009.jpg
+    - Assets/image/A0009.jpg
+    - Assets/image/H0001.jpg
+    - Assets/image/Deadpool1.jpg
+    - Assets/image/T0005.jpg
+    - Assets/image/R0005.jpg
+    - Assets/image/R0006.jpg
+    - Assets/image/D0004.jpg
+    - Assets/image/C0005.jpg
+    - Assets/image/C0004.jpg
+    - Assets/image/H0005.jpg
+    - Assets/image/H0006.jpg
+    - Assets/image/H0007.jpg
+    - Assets/image/logo.png
+    - Assets/image/Co0001.jpg
 
-  uses-material-design: true
+  fonts:
+    - family: PlayfairDisplay
+      fonts:
+        - asset: fonts/PlayfairDisplay-ExtraBold.ttf
+    - family: PTSerif
+      fonts:
+        - asset: fonts/PTSerif-Regular.ttf

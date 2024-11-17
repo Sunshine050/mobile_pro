@@ -57,11 +57,11 @@ class _BookassetpageState extends State<BookassetUser> {
         _showErrorDialog('Error: User not logged in. Please log in again.');
         return;
       }
-      //=================เปลี่ยน ip=========================================
+
       final response = await http.get(
-        Uri.parse('http:// 192.168.206.1:3000/assets'),
+        Uri.parse('http://192.168.206.1:3000/borrow'),
         headers: {
-          'Authorization': ' $token',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
