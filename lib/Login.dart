@@ -3,6 +3,10 @@ import 'package:project/Admin/Home_Admin.dart';
 import 'package:project/Approver/Home_Approver.dart';
 import 'package:project/User/Home_User.dart';
 import 'package:project/register.dart'; // Import the Register page
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart'; // Import SharedPreferences
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
@@ -19,37 +23,14 @@ class LoginPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Logo with App Title
-              const CircleAvatar(
-                radius: 80,
-                backgroundColor: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.book,
-                        size: 60, color: Colors.orange), // Placeholder icon
-                    Text(
-                      "นาย มาร์ช",
-                      style: TextStyle(
-                        color: Colors.orange,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+              Image.asset(
+                'Assets/image/logo.png', // Replace with your logo
+                width: 200,
+                height: 200,
+                fit: BoxFit.contain,
               ),
               const SizedBox(height: 20),
-              const Text(
-                "BORROW APP",
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 40),
-
-              // Username TextField
+              // Username
               TextField(
                 controller: usernameController,
                 decoration: InputDecoration(
@@ -67,7 +48,7 @@ class LoginPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Password TextField
+              // Password
               TextField(
                 controller: passwordController,
                 obscureText: true,
@@ -86,7 +67,7 @@ class LoginPage extends StatelessWidget {
               ),
               const SizedBox(height: 30),
 
-              // Login Button
+              // Login
               ElevatedButton(
                 onPressed: () {
                   _handleLogin(context);
@@ -101,7 +82,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 child: const Text(
                   "Login",
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
               const SizedBox(height: 20),
@@ -118,9 +99,7 @@ class LoginPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            Register()), // Navigate to Register page
+                    MaterialPageRoute(builder: (context) => RegisterPage()),
                   );
                 },
                 style: OutlinedButton.styleFrom(
@@ -143,29 +122,62 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  void _handleLogin(BuildContext context) {
+  Future<void> _handleLogin(BuildContext context) async {
     String username = usernameController.text;
     String password = passwordController.text;
 
-    // Here, you can replace this logic with your actual authentication logic
-    // For demonstration, I'll use hardcoded values.
-    if (username == 'admin' && password == '222') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeAdmin()),
+    try {
+      final response = await http.post(
+        //=================เปลี่ยน ip=========================================
+        Uri.parse('http://192.168.1.6:3000/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'username': username, 'password': password}),
       );
-    } else if (username == 'approver' && password == '333') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeApprover()),
-      );
-    } else if (username == 'user' && password == '111') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeUser()),
-      );
-    } else {
-      // Show an error message if the credentials are invalid
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+
+        // เก็บ user data ลง SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('userId', data['userId'].toString());
+        prefs.setString('token', data['token']);
+        prefs.setInt('role', data['role']);
+
+        // ใช้ payload
+        final jwt = JWT.decode(data['token']);
+        print(data['token']);
+
+        String userId =
+            jwt.payload['userId']?.toString() ?? ''; // จัดการต่า null
+        int role = jwt.payload['role'] != null
+            ? int.tryParse(jwt.payload['role'].toString()) ?? 0
+            : 0;
+        //print ดู User Id
+        print("User ID from payload: $userId");
+        print("User role from payload: $role");
+
+        // ย้ายหน้าตามrole
+        if (role == 1) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeUser()),
+          );
+        } else if (role == 2) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeAdmin()),
+          );
+        } else if (role == 3) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeApprover()),
+          );
+        }
+      } else {
+        _showErrorDialog(context);
+      }
+    } catch (e) {
+      print('Error: $e');
       _showErrorDialog(context);
     }
   }
