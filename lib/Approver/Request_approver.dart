@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'dart:io';
 
@@ -6,6 +8,8 @@ import 'package:project/Approver/Dashboard_Approver.dart';
 import 'package:project/Approver/History_Approver.dart';
 import 'package:project/Approver/Home_Approver.dart';
 import 'package:project/Login.dart';
+import 'package:http/http.dart' as http;
+import 'package:project/User/request.dart';
 
 class RequestApprover extends StatefulWidget {
   final File? profileImage;
@@ -83,6 +87,38 @@ class _RequestApproverState extends State<RequestApprover> {
       bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
+
+
+// ฟังก์ชันดึงข้อมูลจาก API
+Future<void> fetchAssets() async {
+  try {
+    final response = await http.get(
+      Uri.parse('http://192.168.206.1:3000/borrow'), // URL ของ API ที่คุณกำหนด
+      headers: {
+        'Authorization': 'Bearer YOUR_TOKEN_HERE', // ใส่ token ของคุณถ้ามี
+      },
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        // ตรวจสอบว่า response.body เป็นข้อมูลที่ตรงกับที่คาดหวัง
+        _assets = jsonDecode(response.body); // ใช้ _assets แทน books
+      });
+    } else {
+      setState(() {
+        var errorMessage = 'Failed to load data. Please try again later.';
+      });
+    }
+  } catch (e) {
+    // ไม่แสดงข้อผิดพลาดใน console
+    // สามารถแสดงข้อความให้ผู้ใช้ทราบว่าเกิดข้อผิดพลาดบางอย่าง
+    setState(() {
+      var errorMessage = 'An error occurred. Please check your connection.';
+    });
+  }
+}
+
+
 
   AppBar _buildAppBar() {
     return AppBar(
@@ -509,4 +545,7 @@ class _RequestApproverState extends State<RequestApprover> {
       ),
     );
   }
+}
+
+class _assets {
 }
